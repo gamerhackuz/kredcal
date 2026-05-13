@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kredit Kalkulyatori</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: linear-gradient(135deg, #1e3c72, #2a5298); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 12px 35px rgba(0,0,0,0.2); width: 100%; max-width: 400px; }
+        h2 { text-align: center; color: #1e3c72; margin-bottom: 20px; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; color: #555; font-size: 14px; }
+        input { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; outline: none; }
+        input:focus { border-color: #2a5298; }
+        button { width: 100%; padding: 14px; background: #2a5298; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+        button:hover { background: #1e3c72; }
+        .result { margin-top: 20px; padding: 15px; background: #f8f9ff; border-radius: 10px; display: none; }
+        .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #ddd; }
+        .row:last-child { border-bottom: none; font-weight: bold; color: #1e3c72; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>💰 Kredit Kalkulyatori</h2>
+        <div class="input-group"><label>Kredit summasi (so'm)</label><input type="number" id="amount" placeholder="10000000"></div>
+        <div class="input-group"><label>Yillik foiz (%)</label><input type="number" id="rate" placeholder="24"></div>
+        <div class="input-group"><label>Muddat (oy)</label><input type="number" id="months" placeholder="12"></div>
+        <button onclick="calculate()">Hisoblash</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculate() {
+            const P = parseFloat(document.getElementById('amount').value);
+            const r = parseFloat(document.getElementById('rate').value) / 1200;
+            const n = parseFloat(document.getElementById('months').value);
+
+            if (!P || !r || !n) return alert("Barcha maydonlarni to'ldiring!");
+
+            const monthly = (P * r) / (1 - Math.pow(1 + r, -n));
+            const total = monthly * n;
+            const interest = total - P;
+
+            const fmt = n => Math.round(n).toLocaleString() + " so'm";
+
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').innerHTML = `
+                <div class="row"><span>Oylik to'lov:</span><span>${fmt(monthly)}</span></div>
+                <div class="row"><span>Jami qaytariladigan:</span><span>${fmt(total)}</span></div>
+                <div class="row"><span>Foizlar farqi:</span><span style="color:#e63946">${fmt(interest)}</span></div>
+            `;
+        }
+    </script>
+</body>
+</html>
